@@ -29,5 +29,6 @@ data['jenis_diskon'] = data['full_text'].str.lower().apply(detect_jenis_diskon)
 
 filtered_data = data[data['jenis_diskon'].isin(filter)]
 count = filtered_data[filtered_data.columns[0]].count()
+
 st.write(f'{filtered_data[filtered_data.columns[0]].count()} Result')
 st.dataframe(filtered_data[['full_text', 'tweet_url']])
