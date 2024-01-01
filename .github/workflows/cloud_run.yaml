@@ -52,7 +52,7 @@ on:
 
 env:
   PROJECT_ID: chrome-plateau-407909 # TODO: update Google Cloud project id
-  SERVICE: cloud_computing # TODO: update Cloud Run service name
+  SERVICE: cloudcomputing # TODO: update Cloud Run service name
   REGION: northamerica-northeast1 # TODO: update Cloud Run service region
   GAR_LOCATION: northamerica-northeast1 # TODO: update Artifact Registry location
 
