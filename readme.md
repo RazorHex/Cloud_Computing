@@ -1,3 +1,5 @@
+[![Deploy to Cloud Run](https://github.com/RazorHex/Cloud_Computing/actions/workflows/cloud_run.yaml/badge.svg)](https://github.com/RazorHex/Cloud_Computing/actions/workflows/cloud_run.yaml)
+
 # Library
 
 1. Pandas
