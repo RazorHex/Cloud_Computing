@@ -25,6 +25,10 @@ st.sidebar.markdown('''
 ---
 Tugas Besar Mata Kuliah Cloud Computing
 ''')
+st.sidebar.write("Ahda Akmalul Ilmi <br> Fabiano Abbey Karo Sekali <br> Danny Aulia", unsafe_allow_html=True)
+
+
+
 
 st.title('Cloud Computing Kelompok 3')
 data = pd.read_csv('./data/diskon.csv', on_bad_lines='warn')
@@ -43,6 +47,9 @@ selection = ['Fashion', 'Kosmetik', 'Tiket', 'Makanan', 'Lainnya']
 # selection_Lainnya = ['Lainnya']
 
 filter = st.multiselect('Filter', selection)
+if filter and not plot_data:
+    st.warning("Pilih opsi multiselect di Bagian Dashboard.")
+    st.warning("Icon Dashboard berada di Ujung kiri atas [>]")
 
 def detect_jenis_diskon(text):
     if any(keyword in text for keyword in fashion):
@@ -56,59 +63,61 @@ def detect_jenis_diskon(text):
     else:
         return 'Lainnya'
 
-data['jenis_diskon'] = data['full_text'].str.lower().apply(detect_jenis_diskon)
+if 'Data 1' in plot_data:
+    data['jenis_diskon'] = data['full_text'].str.lower().apply(detect_jenis_diskon)
 
 #Data 1
-filtered_data = data[data['jenis_diskon'].isin(filter)]
-count = filtered_data[filtered_data.columns[0]].count()
+    filtered_data = data[data['jenis_diskon'].isin(filter)]
+    count = filtered_data[filtered_data.columns[0]].count()
 
-c1,c2 = st.columns((8.5,1.5))
-with c1 :
-    st.write(f'{filtered_data[filtered_data.columns[0]].count()} Hasil')
-    st.dataframe(filtered_data[['full_text', 'tweet_url','username']])
-with c2 :
-    st.write('Total Keseluruhan')
-    jumlah_data_per_kategori = data[data['jenis_diskon'].isin(selection)]['jenis_diskon'].value_counts()
-    st.write(jumlah_data_per_kategori)
+    c1,c2 = st.columns((8.5,1.5))
+    with c1 :
+        st.write(f'{filtered_data[filtered_data.columns[0]].count()} Hasil')
+        st.dataframe(filtered_data[['full_text', 'tweet_url','username']])
+    with c2 :
+        st.write('Total Keseluruhan')
+        jumlah_data_per_kategori = data[data['jenis_diskon'].isin(selection)]['jenis_diskon'].value_counts()
+        st.write(jumlah_data_per_kategori)
 
-st.write("*Bar Chart Data 1*")
-data_source = pd.DataFrame({
-    "Jumlah": [jumlah_data_per_kategori[2], jumlah_data_per_kategori[4], jumlah_data_per_kategori[1],jumlah_data_per_kategori[3]],
-    "Opsi": ['Fashion', 'Kosmetik', 'Tiket', 'Makanan']
-})
+    st.write("*Bar Chart Data 1*")
+    data_source = pd.DataFrame({
+        "Jumlah": [jumlah_data_per_kategori[2], jumlah_data_per_kategori[4], jumlah_data_per_kategori[1],jumlah_data_per_kategori[3]],
+        "Opsi": ['Fashion', 'Kosmetik', 'Tiket', 'Makanan']
+    })
 
 
-# Membuat chart dengan Altair
-bar_chart = alt.Chart(data_source).mark_bar().encode(
-    x=alt.X("Opsi:N", title="Kategori Diskon"),
-    y=alt.Y("sum(Jumlah):Q", title="Total Jumlah"),
-    color="Opsi:N"
-)
-st.altair_chart(bar_chart, use_container_width=True)
+    # Membuat chart dengan Altair
+    bar_chart = alt.Chart(data_source).mark_bar().encode(
+        x=alt.X("Opsi:N", title="Kategori Diskon"),
+        y=alt.Y("sum(Jumlah):Q", title="Total Jumlah"),
+        color="Opsi:N"
+    )
+    st.altair_chart(bar_chart, use_container_width=True)
 
-data2['jenis_diskon'] = data2['full_text'].str.lower().apply(detect_jenis_diskon)
+if 'Data 2' in plot_data:
+    data2['jenis_diskon'] = data2['full_text'].str.lower().apply(detect_jenis_diskon)
 
-filtered_data2 = data2[data2['jenis_diskon'].isin(filter)]
-count2 = filtered_data2[filtered_data2.columns[0]].count()
+    filtered_data2 = data2[data2['jenis_diskon'].isin(filter)]
+    count2 = filtered_data2[filtered_data2.columns[0]].count()
 
-c1,c2 = st.columns((8.5,1.5))
-with c1 :
-    st.write(f'{filtered_data2[filtered_data2.columns[0]].count()} Hasil')
-    st.dataframe(filtered_data2[['full_text', 'tweet_url','username']])
-with c2 :
-    st.write('Total Keseluruhan')
-    jumlah_data_per_kategori2 = data2[data2['jenis_diskon'].isin(selection)]['jenis_diskon'].value_counts()
-    st.write(jumlah_data_per_kategori2)
+    c1,c2 = st.columns((8.5,1.5))
+    with c1 :
+        st.write(f'{filtered_data2[filtered_data2.columns[0]].count()} Hasil')
+        st.dataframe(filtered_data2[['full_text', 'tweet_url','username']])
+    with c2 :
+        st.write('Total Keseluruhan')
+        jumlah_data_per_kategori2 = data2[data2['jenis_diskon'].isin(selection)]['jenis_diskon'].value_counts()
+        st.write(jumlah_data_per_kategori2)
 
-st.write("*Bar Chart Data 2*")
-data_source2 = pd.DataFrame({
-    "Jumlah": [jumlah_data_per_kategori2[2], jumlah_data_per_kategori2[4], jumlah_data_per_kategori2[1],jumlah_data_per_kategori2[3]],
-    "Opsi": ['Fashion', 'Kosmetik', 'Tiket', 'Makanan']
-})
+    st.write("*Bar Chart Data 2*")
+    data_source2 = pd.DataFrame({
+        "Jumlah": [jumlah_data_per_kategori2[2], jumlah_data_per_kategori2[4], jumlah_data_per_kategori2[1],jumlah_data_per_kategori2[3]],
+        "Opsi": ['Fashion', 'Kosmetik', 'Tiket', 'Makanan']
+    })
 
-bar_chart2= alt.Chart(data_source2).mark_bar().encode(
-    x=alt.X("Opsi:N", title="Kategori Diskon"),
-    y=alt.Y("sum(Jumlah):Q", title="Total Jumlah"),
-    color="Opsi:N"
-)
-st.altair_chart(bar_chart2, use_container_width=True)
+    bar_chart2= alt.Chart(data_source2).mark_bar().encode(
+        x=alt.X("Opsi:N", title="Kategori Diskon"),
+        y=alt.Y("sum(Jumlah):Q", title="Total Jumlah"),
+        color="Opsi:N"
+    )
+    st.altair_chart(bar_chart2, use_container_width=True)
