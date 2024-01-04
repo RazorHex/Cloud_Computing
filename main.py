@@ -19,7 +19,7 @@ st.sidebar.header('Dashboard `Cloud Computing`')
 
 st.sidebar.subheader('Pilih Data Yang Diinginkan')
 plot_data = st.sidebar.multiselect('Select data', ['Data 1', 'Data 2'], ['Data 2', 'Data 1'])
-# plot_height = st.sidebar.slider('Specify plot height', 200, 500, 250)
+plot_height = st.sidebar.slider('Banyak Data Yang Ingin Ditampilkan', 50, 500, 50)
 
 st.sidebar.markdown('''
 ---
@@ -63,19 +63,23 @@ def detect_jenis_diskon(text):
     else:
         return 'Lainnya'
 
+def process_data(data, filter, limit):
+    filtered_data = data[data['jenis_diskon'].isin(filter)]
+    return filtered_data[['full_text', 'tweet_url', 'username']].head(limit)
+
 if 'Data 1' in plot_data:
     data['jenis_diskon'] = data['full_text'].str.lower().apply(detect_jenis_diskon)
 
 #Data 1
-    filtered_data = data[data['jenis_diskon'].isin(filter)]
+    filtered_data = process_data(data, filter, plot_height)
     count = filtered_data[filtered_data.columns[0]].count()
 
     c1,c2 = st.columns((8.5,1.5))
     with c1 :
         st.write(f'{filtered_data[filtered_data.columns[0]].count()} Hasil')
-        st.dataframe(filtered_data[['full_text', 'tweet_url','username']])
+        st.table(filtered_data[['full_text', 'tweet_url','username']].head(plot_height))
     with c2 :
-        st.write('Total Keseluruhan')
+        st.write('Total Keseluruhan Data 1')
         jumlah_data_per_kategori = data[data['jenis_diskon'].isin(selection)]['jenis_diskon'].value_counts()
         st.write(jumlah_data_per_kategori)
 
@@ -86,7 +90,6 @@ if 'Data 1' in plot_data:
     })
 
 
-    # Membuat chart dengan Altair
     bar_chart = alt.Chart(data_source).mark_bar().encode(
         x=alt.X("Opsi:N", title="Kategori Diskon"),
         y=alt.Y("sum(Jumlah):Q", title="Total Jumlah"),
@@ -94,18 +97,19 @@ if 'Data 1' in plot_data:
     )
     st.altair_chart(bar_chart, use_container_width=True)
 
+#Data 2
 if 'Data 2' in plot_data:
     data2['jenis_diskon'] = data2['full_text'].str.lower().apply(detect_jenis_diskon)
 
-    filtered_data2 = data2[data2['jenis_diskon'].isin(filter)]
+    filtered_data2 = process_data(data2, filter, plot_height)
     count2 = filtered_data2[filtered_data2.columns[0]].count()
 
     c1,c2 = st.columns((8.5,1.5))
     with c1 :
         st.write(f'{filtered_data2[filtered_data2.columns[0]].count()} Hasil')
-        st.dataframe(filtered_data2[['full_text', 'tweet_url','username']])
+        st.table(filtered_data2[['full_text', 'tweet_url','username']].head(plot_height))
     with c2 :
-        st.write('Total Keseluruhan')
+        st.write('Total Keseluruhan Data 2')
         jumlah_data_per_kategori2 = data2[data2['jenis_diskon'].isin(selection)]['jenis_diskon'].value_counts()
         st.write(jumlah_data_per_kategori2)
 
